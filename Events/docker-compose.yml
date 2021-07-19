@@ -1,0 +1,51 @@
+#version: '3'
+#services:
+#    mysql-standalone:
+#      image: 'mysql'
+#      environment:
+#        - MYSQL_ROOT_PASSWORD = "test123"
+#        - MYSQL_PASSWORD = "test123"
+#        - MYSQL_DATABASE = "mydb"
+#      ports:
+#        - "3307:3306"
+#
+#    spring-mysql-linked:
+#     image: spring-mysql-linked
+#     ports:
+#       - "8085:8085"
+#     restart: unless-stopped
+#     environment:
+#        SPRING_DATASOURCE_URL: jdbc:mysql://mysql-standalone:3306/mydb?autoReconnect=true&useSSL=false
+#        SPRING_DATASOURCE_USERNAME: "test"
+#        SPRING_DATASOURCE_PASSWORD: "test123"
+#
+#     build:
+#        context: "./"
+#        dockerfile: "Dockerfile"
+#     depends_on:
+#        - mysql-standalone
+
+version: '3'
+services:
+  mysql-standalone:
+    image: 'mysql'
+    environment:
+      - MYSQL_ROOT_PASSWORD=test123
+      - MYSQL_PASSWORD=test123
+      - MYSQL_DATABASE=mydb
+    ports:
+      - "3307:3306"
+  spring-mysql-linked:
+    image: spring-mysql-linked
+    ports:
+      - "8085:8080"
+    restart: unless-stopped
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-standalone:3306/mydb?autoReconnect=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: "test"
+      SPRING_DATASOURCE_PASSWORD: "test123"
+    build:
+      context: "./"
+      dockerfile: "DockerFile"
+    depends_on:
+      - mysql-standalone
